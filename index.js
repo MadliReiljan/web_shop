@@ -1,9 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 
 const app = express();
 
-app.use(bodyParser.urlencoded ({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 const productAdminRoutes = require('./routes/admin/products')
 app.use('/admin', productAdminRoutes)
@@ -13,16 +13,36 @@ app.use(productRoutes)
 
 const sequelize = require('./util/db')
 
-const models = require('./models/index');
-sequelize.models = models
+const models = require('./models/index')
+sequelize.models = models;
 
+app.use((req, res, next)=> {
+    models.User.findByPk(1)
+    .then(user => {
+        req.user = user;
+        next();
+    })
+    .catch(err => console.log(err))
+})
 sequelize
-    .sync()
+    .sync({force: true})
     .then(() => {
-        console.log('Tabelid on loodud')
-        app.listen(3002);
+        return models.User.findByPk(1)
     })
-    .catch((error) => {
-        console.error(error);
+    .then(user => {
+        if (!user) {
+            return models.User.create({ name: 'user', email: 'user@localStorage.com', })
+        }
+        return user;
+    })
+    .then(() => {
+        console.log('Connection to the database has been established successfully');
+    })
+    .catch((error) =>{
+        console.error('Unable to connect ot the database', error);
     })
 
+
+app.get('/', (req, res) => {
+    res.json({message: 'web shop app'})
+})

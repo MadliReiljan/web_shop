@@ -9,7 +9,7 @@ class adminController {
             products: products
         })
     }
-    
+
     async getProductById(req, res) {
         const product = await Product.findByPk(req.params.id)
         res.status(201).json({
@@ -22,7 +22,8 @@ class adminController {
             title: req.body.title,
             price: req.body.price,
             imageUrl: req.body.imageUrl,
-            description: req.body.description
+            description: req.body.description,
+            userId: req.user.id
         })
         res.status(201).json({
             message: 'Product has been added',
