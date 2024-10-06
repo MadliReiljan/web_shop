@@ -6,4 +6,4 @@ router.get('/products', (req, res) => productController.getAllProducts(req, res)
 
 router.get('/products/:id', (req, res) => productController.getProductById(req, res))
 
-module.exports = router
+module.exports = router;
