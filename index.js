@@ -7,7 +7,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 const sequelize = require('./util/db')
-
 const models = require('./models/index')
 sequelize.models = models;
 
@@ -53,7 +52,6 @@ app.use(productRoutes)
 
 const shopRoutes = require('./routes/shop')
 app.use(shopRoutes)
-
 
 app.get('/', (req, res) => {
     res.json({message: 'web shop app'})
